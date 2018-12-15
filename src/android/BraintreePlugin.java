@@ -124,7 +124,7 @@ public final class BraintreePlugin extends CordovaPlugin {
 
         String disablePaypal = args.getString(2);
         
-        if(disablePaypal.equals("NO")){
+        if(disablePaypal.equals("YES")){
             dropInRequest.disablePaypal();
         }
 
