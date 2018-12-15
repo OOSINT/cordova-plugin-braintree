@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    compile 'com.braintreepayments.api:braintree:2.12.0'
+    compile 'com.braintreepayments.api:braintree:2.19.0'
     compile 'com.braintreepayments.api:drop-in:3.7.1'
     compile 'io.card:android-sdk:5.5.1'
 }
