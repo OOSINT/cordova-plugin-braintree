@@ -151,6 +151,7 @@ NSString *countryCode;
     }
     
     NSString* primaryDescription = [command.arguments objectAtIndex:1];
+    NSString* paypalDisabled = [command.arguments objectAtIndex:2];
     
     // Save off the Cordova callback ID so it can be used in the completion handlers.
     dropInUIcallbackId = command.callbackId;
@@ -159,6 +160,11 @@ NSString *countryCode;
     BTDropInRequest *paymentRequest = [[BTDropInRequest alloc] init];
     paymentRequest.amount = amount;
     paymentRequest.applePayDisabled = !applePayInited;
+    if ([paypalDisabled isEqualToString:@"YES"]){ 
+        paymentRequest.paypalDisabled = YES;
+    } else {
+        paymentRequest.paypalDisabled = NO;
+    }
     
     BTDropInController *dropIn = [[BTDropInController alloc] initWithAuthorization:self.token request:paymentRequest handler:^(BTDropInController * _Nonnull controller, BTDropInResult * _Nullable result, NSError * _Nullable error) {
         [self.viewController dismissViewControllerAnimated:YES completion:nil];

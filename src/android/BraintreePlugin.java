@@ -122,6 +122,12 @@ public final class BraintreePlugin extends CordovaPlugin {
 
         dropInRequest.amount(amount);
 
+        String disablePaypal = args.getString(2);
+        
+        if(disablePaypal.equals("NO")){
+            dropInRequest.disablePaypal();
+        }
+
         this.cordova.setActivityResultCallback(this);
         this.cordova.startActivityForResult(this, dropInRequest.getIntent(this.cordova.getActivity()), DROP_IN_REQUEST);
 

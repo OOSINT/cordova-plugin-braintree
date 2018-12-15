@@ -80,11 +80,16 @@ BraintreePlugin.presentDropInPaymentUI = function showDropInUI(options, successC
     };
     if (!isNaN(options.amount * 1)) {
 	    options.amount = (options.amount * 1).toFixed(2)
-	}
+    }
+    
+    if (typeof(options.paypalDisabled) !== "undefined") {
+        options.paypalDisabled = "NO";
+    };
 
     var pluginOptions = [
         options.amount,
-        options.primaryDescription
+        options.primaryDescription,
+        options.paypalDisabled
 	];
 
 	exec(successCallback, failureCallback, PLUGIN_ID, "presentDropInPaymentUI", pluginOptions);
