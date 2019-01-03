@@ -21,14 +21,14 @@ var BraintreePlugin = {};
  * @param [function] successCallback - The success callback for this asynchronous function.
  * @param [function] failureCallback - The failure callback for this asynchronous function; receives an error string.
  */
-BraintreePlugin.initialize = function initialize(token, successCallback, failureCallback) {
+BraintreePlugin.initialize = function initialize(token,enablePayPal, successCallback, failureCallback) {
 
     if (!token || typeof(token) !== "string") {
         failureCallback("A non-null, non-empty string must be provided for the token parameter.");
         return;
     }
 
-    exec(successCallback, failureCallback, PLUGIN_ID, "initialize", [token]);
+    exec(successCallback, failureCallback, PLUGIN_ID, "initialize", [token,enablePayPal]);
 };
 
 /**
@@ -60,6 +60,9 @@ BraintreePlugin.setupApplePay = function setupApplePay(options, successCallback,
     ];
 
 	exec(successCallback, failureCallback, PLUGIN_ID, "setupApplePay", pluginOptions);
+};
+BraintreePlugin.disablePayPal = function setupApplePay(successCallback, failureCallback) {
+    exec(successCallback, failureCallback, PLUGIN_ID, "disablePayPal");
 };
 
 /**

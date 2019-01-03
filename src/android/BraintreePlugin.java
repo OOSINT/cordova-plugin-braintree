@@ -48,6 +48,17 @@ public final class BraintreePlugin extends CordovaPlugin {
 
             return true;
         }
+        else if (action.equals("disablePayPal")) {
+
+            try {
+                this.disablePayPal(callbackContext);
+            }
+            catch (Exception exception) {
+                callbackContext.error("BraintreePlugin uncaught exception: " + exception.getMessage());
+            }
+
+            return true;
+        }
         else if (action.equals("presentDropInPaymentUI")) {
 
             try {
@@ -91,6 +102,14 @@ public final class BraintreePlugin extends CordovaPlugin {
         callbackContext.success();
     }
 
+    private synchronized void disablePayPal(final CallbackContext callbackContext) throws JSONException {
+        if (dropInRequest == null) {
+            callbackContext.error("The Braintree client must first be initialized via BraintreePlugin.initialize(token)");
+            return;
+        }
+       dropInRequest.disablePaypal();
+       callbackContext.success();
+    }
     private synchronized void setupApplePay(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         // Apple Pay available on iOS only
         callbackContext.success();
@@ -121,12 +140,6 @@ public final class BraintreePlugin extends CordovaPlugin {
         String primaryDescription = args.getString(1);
 
         dropInRequest.amount(amount);
-
-        String disablePaypal = args.getString(2);
-        
-        if(disablePaypal.equals("YES")){
-            dropInRequest.disablePaypal();
-        }
 
         this.cordova.setActivityResultCallback(this);
         this.cordova.startActivityForResult(this, dropInRequest.getIntent(this.cordova.getActivity()), DROP_IN_REQUEST);
