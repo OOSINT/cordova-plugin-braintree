@@ -59,17 +59,6 @@ public final class BraintreePlugin extends CordovaPlugin {
 
             return true;
         }
-        else if (action.equals("disablePayPal")) {
-
-            try {
-                this.disablePayPal(callbackContext);
-            }
-            catch (Exception exception) {
-                callbackContext.error("BraintreePlugin uncaught exception: " + exception.getMessage());
-            }
-
-            return true;
-        }
         else if (action.equals("presentDropInPaymentUI")) {
 
             try {
