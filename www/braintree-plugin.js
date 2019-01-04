@@ -21,14 +21,23 @@ var BraintreePlugin = {};
  * @param [function] successCallback - The success callback for this asynchronous function.
  * @param [function] failureCallback - The failure callback for this asynchronous function; receives an error string.
  */
-BraintreePlugin.initialize = function initialize(token,enablePayPal, successCallback, failureCallback) {
+BraintreePlugin.initialize = function initialize(token, successCallback, failureCallback) {
 
     if (!token || typeof(token) !== "string") {
         failureCallback("A non-null, non-empty string must be provided for the token parameter.");
         return;
     }
 
-    exec(successCallback, failureCallback, PLUGIN_ID, "initialize", [token,enablePayPal]);
+    exec(successCallback, failureCallback, PLUGIN_ID, "initialize", [token]);
+};
+BraintreePlugin.initializeWithPayPal = function initializeWithPayPal(token, successCallback, failureCallback) {
+
+    if (!token || typeof(token) !== "string") {
+        failureCallback("A non-null, non-empty string must be provided for the token parameter.");
+        return;
+    }
+
+    exec(successCallback, failureCallback, PLUGIN_ID, "initializeWithPayPal", [token]);
 };
 
 /**
@@ -61,9 +70,6 @@ BraintreePlugin.setupApplePay = function setupApplePay(options, successCallback,
 
 	exec(successCallback, failureCallback, PLUGIN_ID, "setupApplePay", pluginOptions);
 };
-BraintreePlugin.disablePayPal = function setupApplePay(successCallback, failureCallback) {
-    exec(successCallback, failureCallback, PLUGIN_ID, "disablePayPal");
-};
 
 /**
  * Shows Braintree's drop-in payment UI.
@@ -84,15 +90,11 @@ BraintreePlugin.presentDropInPaymentUI = function showDropInUI(options, successC
     if (!isNaN(options.amount * 1)) {
 	    options.amount = (options.amount * 1).toFixed(2)
     }
-    
-    if (typeof(options.paypalDisabled) !== "undefined") {
-        options.paypalDisabled = "NO";
-    };
+ 
 
     var pluginOptions = [
         options.amount,
-        options.primaryDescription,
-        options.paypalDisabled
+        options.primaryDescription
 	];
 
 	exec(successCallback, failureCallback, PLUGIN_ID, "presentDropInPaymentUI", pluginOptions);

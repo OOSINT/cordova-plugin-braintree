@@ -48,6 +48,17 @@ public final class BraintreePlugin extends CordovaPlugin {
 
             return true;
         }
+        else if (action.equals("initializeWithPayPal")) {
+
+            try {
+                this.initializeWithPayPal(args, callbackContext);
+            }
+            catch (Exception exception) {
+                callbackContext.error("BraintreePlugin uncaught exception: " + exception.getMessage());
+            }
+
+            return true;
+        }
         else if (action.equals("disablePayPal")) {
 
             try {
@@ -76,7 +87,33 @@ public final class BraintreePlugin extends CordovaPlugin {
         }
     }
 
-    private synchronized void initialize(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    private synchronized void  initialize(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+
+        // Ensure we have the correct number of arguments.
+        if (args.length() != 1) {
+            callbackContext.error("A token is required.");
+            return;
+        }
+
+        // Obtain the arguments.
+        String token = args.getString(0);
+
+        if (token == null || token.equals("")) {
+            callbackContext.error("A token is required.");
+            return;
+        }
+
+        dropInRequest = new DropInRequest().clientToken(token).disablePayPal();
+
+        if (dropInRequest == null) {
+            callbackContext.error("The Braintree client failed to initialize.");
+            return;
+        }
+
+        callbackContext.success();
+    }
+
+    private synchronized void  initializeWithPayPal(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
 
         // Ensure we have the correct number of arguments.
         if (args.length() != 1) {
@@ -102,14 +139,7 @@ public final class BraintreePlugin extends CordovaPlugin {
         callbackContext.success();
     }
 
-    private synchronized void disablePayPal(final CallbackContext callbackContext) throws JSONException {
-        if (dropInRequest == null) {
-            callbackContext.error("The Braintree client must first be initialized via BraintreePlugin.initialize(token)");
-            return;
-        }
-       dropInRequest.disablePaypal();
-       callbackContext.success();
-    }
+    
     private synchronized void setupApplePay(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         // Apple Pay available on iOS only
         callbackContext.success();
