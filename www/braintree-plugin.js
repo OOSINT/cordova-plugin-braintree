@@ -39,7 +39,6 @@ BraintreePlugin.initializeWithPayPal = function initializeWithPayPal(token, succ
 
     exec(successCallback, failureCallback, PLUGIN_ID, "initializeWithPayPal", [token]);
 };
-
 /**
  * Used to configure Apple Pay on iOS.
  * 
@@ -91,7 +90,6 @@ BraintreePlugin.presentDropInPaymentUI = function showDropInUI(options, successC
 	    options.amount = (options.amount * 1).toFixed(2)
     }
  
-
     var pluginOptions = [
         options.amount,
         options.primaryDescription
@@ -100,4 +98,14 @@ BraintreePlugin.presentDropInPaymentUI = function showDropInUI(options, successC
 	exec(successCallback, failureCallback, PLUGIN_ID, "presentDropInPaymentUI", pluginOptions);
 };
 
+BraintreePlugin.dropInRequest = function dropInRequest(successCallback, failureCallback) {
+    exec(successCallback, failureCallback, PLUGIN_ID, 'dropInRequest');
+  };
+BraintreePlugin.paypalProcess = function paypalProcess(amount, currency, env, successCallback, failureCallback) {
+    exec(successCallback, failureCallback, PLUGIN_ID, 'paypalProcess', [amount, currency, env]);
+  };
+  
+  BraintreePlugin.paypalProcessVaulted = function paypalProcessVaulted(env, successCallback, failureCallback) {
+    exec(successCallback, failureCallback, PLUGIN_ID, 'paypalProcessVaulted', [env]);
+  };
 module.exports = BraintreePlugin;
