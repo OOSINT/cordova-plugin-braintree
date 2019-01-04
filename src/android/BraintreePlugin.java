@@ -89,7 +89,7 @@ public final class BraintreePlugin extends CordovaPlugin {
             return;
         }
 
-        dropInRequest = new DropInRequest().clientToken(token).disablePayPal();
+        dropInRequest = new DropInRequest().clientToken(token);//.disablePayPal();
 
         if (dropInRequest == null) {
             callbackContext.error("The Braintree client failed to initialize.");
@@ -134,7 +134,7 @@ public final class BraintreePlugin extends CordovaPlugin {
                     .error("The Braintree client must first be initialized via BraintreePlugin.initialize(token)");
             return;
         }
-        dropInRequest.disablePayPal();
+        dropInRequest = dropInRequest.disablePayPal();
 
         callbackContext.success();
     }
