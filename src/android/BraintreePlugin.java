@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class BraintreePlugin extends CordovaPlugin {
+    private static final String TAG = "BraintreePlugin";
 
     private static final int DROP_IN_REQUEST = 100;
     private static final int PAYMENT_BUTTON_REQUEST = 200;
@@ -52,6 +54,15 @@ public final class BraintreePlugin extends CordovaPlugin {
 
             try {
                 this.initializeWithPayPal(args, callbackContext);
+            } catch (Exception exception) {
+                callbackContext.error("BraintreePlugin uncaught exception: " + exception.getMessage());
+            }
+
+            return true;
+        } else if (action.equals("disablePayPal")) {
+
+            try {
+                this.disablePayPal(callbackContext);
             } catch (Exception exception) {
                 callbackContext.error("BraintreePlugin uncaught exception: " + exception.getMessage());
             }
@@ -89,7 +100,7 @@ public final class BraintreePlugin extends CordovaPlugin {
             return;
         }
 
-        dropInRequest = new DropInRequest().clientToken(token);//.disablePayPal();
+        dropInRequest = new DropInRequest().clientToken(token);
 
         if (dropInRequest == null) {
             callbackContext.error("The Braintree client failed to initialize.");
@@ -127,15 +138,13 @@ public final class BraintreePlugin extends CordovaPlugin {
     }
 
     private synchronized void disablePayPal(final CallbackContext callbackContext) throws JSONException {
-
         // Ensure the client has been initialized.
         if (dropInRequest == null) {
             callbackContext
                     .error("The Braintree client must first be initialized via BraintreePlugin.initialize(token)");
             return;
         }
-        dropInRequest = dropInRequest.disablePayPal();
-
+        dropInRequest.disablePayPal();
         callbackContext.success();
     }
 
@@ -193,16 +202,6 @@ public final class BraintreePlugin extends CordovaPlugin {
         }
 
         dropInUICallbackContext = callbackContext;
-    }
-
-    private synchronized void paypalProcess(final JSONArray args) throws Exception {
-        PayPalRequest payPalRequest = new PayPalRequest(args.getString(0));
-        payPalRequest.currencyCode(args.getString(1));
-        PayPal.requestOneTimePayment(braintreeFragment, payPalRequest);
-    }
-
-    private synchronized void paypalProcessVaulted() throws Exception {
-        PayPal.authorizeAccount(braintreeFragment);
     }
 
     @Override

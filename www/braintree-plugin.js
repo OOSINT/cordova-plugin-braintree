@@ -27,7 +27,6 @@ BraintreePlugin.initialize = function initialize(token, successCallback, failure
         failureCallback("A non-null, non-empty string must be provided for the token parameter.");
         return;
     }
-
     exec(successCallback, failureCallback, PLUGIN_ID, "initialize", [token]);
 };
 BraintreePlugin.initializeWithPayPal = function initializeWithPayPal(token, successCallback, failureCallback) {
@@ -98,9 +97,9 @@ BraintreePlugin.presentDropInPaymentUI = function showDropInUI(options, successC
 	exec(successCallback, failureCallback, PLUGIN_ID, "presentDropInPaymentUI", pluginOptions);
 };
 
-BraintreePlugin.dropInRequest = function dropInRequest(successCallback, failureCallback) {
-    exec(successCallback, failureCallback, PLUGIN_ID, 'dropInRequest');
-  };
+BraintreePlugin.disablePayPal = function disablePayPal(successCallback, failureCallback) {
+    exec(successCallback, failureCallback, PLUGIN_ID, 'disablePayPal');
+};
 BraintreePlugin.paypalProcess = function paypalProcess(amount, currency, env, successCallback, failureCallback) {
     exec(successCallback, failureCallback, PLUGIN_ID, 'paypalProcess', [amount, currency, env]);
   };
